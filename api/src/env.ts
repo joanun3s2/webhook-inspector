@@ -8,6 +8,7 @@ const envSchemaa = z.object({
   DATABASE_URL: z.url(),
   DATABASE_USER: z.string(),
   DATABASE_PASSWORD: z.string(),
+  GOOGLE_GENERATIVE_AI_API_KEY: z.string(),
 });
 
 export const env = envSchemaa.parse(process.env);
