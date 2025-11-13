@@ -2,8 +2,7 @@ import { FastifyPluginAsyncZod } from 'fastify-type-provider-zod';
 import { z } from 'zod';
 import { createSelectSchema } from 'drizzle-zod';
 import { webhooks } from '@/db/schema';
-import { db } from '@/db';
-import { eq } from 'drizzle-orm';
+import { findWebhookById } from '@/service/webhook.service';
 
 export const getWebhook: FastifyPluginAsyncZod = async (app) => {
   app.get(
@@ -24,17 +23,13 @@ export const getWebhook: FastifyPluginAsyncZod = async (app) => {
     async (request, reply) => {
       const { id } = request.params;
 
-      const result = await db
-        .select()
-        .from(webhooks)
-        .where(eq(webhooks.id, id))
-        .limit(1);
+      const webhook = await findWebhookById(id);
 
-      if (result.length === 0) {
+      if (!webhook) {
         return reply.status(404).send({ message: 'Webhook not found' });
       }
 
-      return reply.send(result[0]);
+      return reply.send(webhook);
     }
   );
 };

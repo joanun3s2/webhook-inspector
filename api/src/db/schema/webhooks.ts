@@ -19,3 +19,6 @@ export const webhooks = pgTable('webhooks', {
   body: text(),
   createdAt: timestamp().notNull().defaultNow(),
 });
+
+export type InsertWebhook = typeof webhooks.$inferInsert;
+export type Webhook = typeof webhooks.$inferSelect;
